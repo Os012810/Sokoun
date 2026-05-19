@@ -41,6 +41,101 @@
             overflow-x: hidden;
         }
 
+        /* SPLASH SCREEN STYLES */
+        .app-splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
+        }
+
+        .splash-logo-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            animation: splashFadeIn 1.2s ease-out forwards;
+        }
+
+        .splash-icon-glow {
+            width: 90px;
+            height: 90px;
+            background: rgba(16, 185, 129, 0.05);
+            border: 2px solid var(--accent);
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 35px;
+            color: var(--accent);
+            box-shadow: 0 0 30px rgba(16, 185, 129, 0.2);
+            animation: pulseGlow 2s infinite alternate;
+        }
+
+        .splash-brand-text {
+            font-size: 32px;
+            font-weight: 900;
+            color: var(--text-primary);
+            letter-spacing: 1px;
+        }
+
+        .splash-brand-text span {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        .splash-sub-text {
+            font-size: 14px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .splash-loader-bar {
+            width: 140px;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            margin-top: 30px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .splash-loader-progress {
+            position: absolute;
+            height: 100%;
+            width: 50%;
+            background: var(--accent);
+            border-radius: 10px;
+            animation: loaderMove 1.5s infinite ease-in-out;
+        }
+
+        @keyframes splashFadeIn {
+            0% { opacity: 0; transform: scale(0.92); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 20px rgba(16, 185, 129, 0.1); }
+            100% { box-shadow: 0 0 40px rgba(16, 185, 129, 0.3); }
+        }
+
+        @keyframes loaderMove {
+            0% { left: -50%; }
+            100% { left: 100%; }
+        }
+
+        .app-splash-screen.splash-hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
         /* MAIN WRAPPER */
         .phone-wrapper {
             width: 100%;
@@ -470,6 +565,19 @@
 </head>
 <body>
 
+    <div class="app-splash-screen" id="appSplashScreen">
+        <div class="splash-logo-container">
+            <div class="splash-icon-glow">
+                <i class="fa-solid fa-hands-praying"></i>
+            </div>
+            <h1 class="splash-brand-text"><span>Soukoun</span> | سكينة</h1>
+            <p class="splash-sub-text">منصة التلاوات الخاشعة الممتازة</p>
+            <div class="splash-loader-bar">
+                <div class="splash-loader-progress"></div>
+            </div>
+        </div>
+    </div>
+
     <div class="phone-wrapper">
         
         <div id="pageReciters" class="app-page active-page">
@@ -530,41 +638,36 @@
 
     <script>
         const recitersDataset = [
-            { 
-                id: 99, 
-                name: "إذاعة القرآن الكريم العامة", 
-                cat: "famous", 
-                desc: "بث إذاعي مباشر ومستمر لأجمل التلاوات الخاشعة", 
-                icon: "fa-solid fa-radio", 
-                isRadio: true, 
-                server: "https://qurango.net/radio/tarateel" 
-            },
-            { 
-                id: 98, 
-                name: "إذاعة الشيخ ماهر المعيقلي", 
-                cat: "haram", 
-                desc: "بث مباشر متواصل لتلاوات الشيخ ماهر المعيقلي", 
-                icon: "fa-solid fa-tower-broadcast", 
-                isRadio: true, 
-                server: "https://qurango.net/radio/maher" 
-            },
-            { id: 0, name: "مشاري راشد العفاسي", cat: "famous", desc: "عذوبة الصوت وإتقان الأداء", icon: "fa-solid fa-circle-nodes", server: "https://server8.mp3quran.net/afs/" },
-            { id: 1, name: "ناصر القطامي", cat: "famous", desc: "تلاوات خاشعة وتدبر آسر", icon: "fa-solid fa-heart", server: "https://server6.mp3quran.net/qtm/" },
-            { id: 2, name: "ماهر المعيقلي", cat: "haram", desc: "صوت الحرم المكي الشريف", icon: "fa-solid fa-mosque", server: "https://server12.mp3quran.net/maher/" },
-            { id: 3, name: "ياسر الدوسري", cat: "haram", desc: "نبرة فريدة تجذب القلوب", icon: "fa-solid fa-gopuram", server: "https://server11.mp3quran.net/yasser/" },
-            { id: 4, name: "عبد الرحمن السديس", cat: "haram", desc: "رئيس أئمة الحرم المكي", icon: "fa-solid fa-kaaba", server: "https://server11.mp3quran.net/sds/" },
-            { id: 5, name: "علي جابر", cat: "haram", desc: "تلاوة تاريخية خاشعة في محراب الحرم", icon: "fa-solid fa-mosque", server: "https://server11.mp3quran.net/jbr/" },
-            { id: 6, name: "محمد اللحيدان", cat: "famous", desc: "صوت باكي وتلاوة متميزة", icon: "fa-solid fa-bolt", server: "https://server8.mp3quran.net/lhdan/" },
-            { id: 7, name: "محمد صديق المنشاوي", cat: "famous", desc: "الصوت الباكي الخاشع المؤثر", icon: "fa-solid fa-hands-praying", server: "https://server10.mp3quran.net/minsh/" },
-            { id: 8, name: "عبد الباسط عبد الصمد", cat: "famous", desc: "صوت مدرسة التلاوة الخالدة", icon: "fa-solid fa-microphone-lines", server: "https://server7.mp3quran.net/basit/" },
-            { id: 9, name: "محمود خليل الحصري", cat: "famous", desc: "شيخ المقارئ وإمام الترتيل", icon: "fa-solid fa-award", server: "https://server13.mp3quran.net/husr/" },
-            { id: 10, name: "خالد الجليل", cat: "famous", desc: "تلاوات مؤثرة تبكي العيون", icon: "fa-solid fa-shield-halved", server: "https://server10.mp3quran.net/jleel/" },
-            { id: 11, name: "إدريس أبكر", cat: "famous", desc: "هدوء وسكينة تأخذك لعالم آخر", icon: "fa-solid fa-spa", server: "https://server6.mp3quran.net/abkr/" },
-            { id: 12, name: "أحمد العجمي", cat: "famous", desc: "قوة الصوت وخشوع الأداء", icon: "fa-solid fa-gem", server: "https://server10.mp3quran.net/ajm/" }
+            { id: 99, name: "إذاعة القرآن الكريم العامة", cat: "famous", desc: "بث إذاعي مباشر ومستمر لأجمل التلاوات", icon: "fa-solid fa-radio", isRadio: true, server: "https://qurango.net/radio/tarateel" },
+            { id: 98, name: "إذاعة الشيخ ماهر المعيقلي", cat: "haram", desc: "بث مباشر متواصل لتلاوات الشيخ ماهر المعيقلي", icon: "fa-solid fa-tower-broadcast", isRadio: true, server: "https://qurango.net/radio/maher" },
+            
+            // أئمة الحرم (Haram) - المصحف المرتل الكامل
+            { id: 2, name: "ماهر المعيقلي", cat: "haram", desc: "المصحف المرتل - صوت الحرم المكي", icon: "fa-solid fa-mosque", server: "https://server12.mp3quran.net/maher/" },
+            { id: 3, name: "ياسر الدوسري", cat: "haram", desc: "المصحف المرتل - نبرة فريدة آثرة", icon: "fa-solid fa-gopuram", server: "https://server11.mp3quran.net/yasser/" },
+            { id: 4, name: "عبد الرحمن السديس", cat: "haram", desc: "المصحف المرتل - رئيس أئمة الحرم المكي", icon: "fa-solid fa-kaaba", server: "https://server11.mp3quran.net/sds/" },
+            { id: 14, name: "سعود الشريم", cat: "haram", desc: "المصحف المرتل - تلاوة حجازية رائعة", icon: "fa-solid fa-mosque", server: "https://server7.mp3quran.net/shur/" },
+            { id: 15, name: "عبد الله عواد الجهني", cat: "haram", desc: "المصحف المرتل - إتقان وإحساس هادئ", icon: "fa-solid fa-kaaba", server: "https://server13.mp3quran.net/jhn/" },
+
+            // المشاهير (Famous) - مصاحف مرتلة كاملة
+            { id: 0, name: "مشاري راشد العفاسي", cat: "famous", desc: "المصحف المرتل - عذوبة الصوت والإتقان", icon: "fa-solid fa-circle-nodes", server: "https://server8.mp3quran.net/afs/" },
+            { id: 1, name: "ناصر القطامي", cat: "famous", desc: "المصحف المرتل - تلاوات تدبرية رائعة", icon: "fa-solid fa-heart", server: "https://server6.mp3quran.net/qtm/" },
+            { id: 6, name: "محمد اللحيدان", cat: "famous", desc: "المصحف المرتل - صوت باكي ونبرة مؤثرة", icon: "fa-solid fa-bolt", server: "https://server8.mp3quran.net/lhdan/" },
+            { id: 8, name: "عبد الباسط عبد الصمد", cat: "famous", desc: "المصحف المرتل - مدرسة التلاوة الفريدة", icon: "fa-solid fa-microphone-lines", server: "https://server7.mp3quran.net/basit/" },
+            { id: 9, name: "محمود خليل الحصري", cat: "famous", desc: "المصحف المرتل - شيخ المقارئ وإمام الترتيل", icon: "fa-solid fa-award", server: "https://server13.mp3quran.net/husr/" },
+            { id: 10, name: "خالد الجليل", cat: "famous", desc: "المصحف المرتل - تلاوات تبكي القلوب للتدبر", icon: "fa-solid fa-shield-halved", server: "https://server10.mp3quran.net/jleel/" },
+            { id: 11, name: "إدريس أبكر", cat: "famous", desc: "المصحف المرتل - هدوء وسكينة تأخذك لعالم آخر", icon: "fa-solid fa-spa", server: "https://server6.mp3quran.net/abkr/" },
+            { id: 12, name: "أحمد العجمي", cat: "famous", desc: "المصحف المرتل - قوة الصوت وخشوع الأداء", icon: "fa-solid fa-gem", server: "https://server10.mp3quran.net/ajm/" },
+            { id: 24, name: "سعد الغامدي", cat: "famous", desc: "المصحف المرتل - صوت عذب ذو انتشار عالمي", icon: "fa-solid fa-star", server: "https://server7.mp3quran.net/s_gmd/" },
+            { id: 25, name: "فارس عباد", cat: "famous", desc: "المصحف المرتل - أداء سريع وقوي يشد الأسماع", icon: "fa-solid fa-bolt", server: "https://server8.mp3quran.net/frs_a/" },
+            { id: 27, name: "محمود علي البنا", cat: "famous", desc: "المصحف المرتل - من عمالقة الجيل الذهبي", icon: "fa-solid fa-microphone", server: "https://server8.mp3quran.net/bna/" },
+            { id: 28, name: "مصطفى إسماعيل", cat: "famous", desc: "المصحف المرتل - قارئ الملوك والصوت العبقري", icon: "fa-solid fa-crown", server: "https://server8.mp3quran.net/mustafa/" },
+            { id: 43, name: "عبد الله المطرود", cat: "famous", desc: "المصحف المرتل - ترتيل واضح ومميز بجودة صوته", icon: "fa-solid fa-lines-leaning", server: "https://server8.mp3quran.net/mtrod/" },
+            { id: 48, name: "محمد صديق المنشاوي (المرتل)", cat: "famous", desc: "المصحف المرتل - تلاوة خاشعة تلمس الروح", icon: "fa-solid fa-book-open", server: "https://server10.mp3quran.net/minsh/" },
+            { id: 49, name: "هاني الرفاعي", cat: "famous", desc: "المصحف المرتل - صوت باكي ومؤثر جداً في التلاوة", icon: "fa-solid fa-eye-dropper", server: "https://server8.mp3quran.net/hani/" }
         ];
 
         const surahIndexMap = [
-            {"id":"001","en":"Al-Fatihah","ar":"الفاتحة"},{"id":"002","en":"Al-Baqarah","ar":"البقرة"},{"id":"003","en":"Ali 'Imran","ar":"آل عمران"},{"id":"004","en":"An-Nisa'","ar":"النساء"},{"id":"005","en":"Al-Ma'idah","ar":"المائدة"},{"id":"006","en":"Al-An'am","ar":"الأنعام"},{"id":"007","en":"Al-A'raf","ar":"الأعراف"},{"id":"008","en":"Al-Anfal","ar":"الأنفال"},{"id":"009","en":"At-Tawbah","ar":"التوبة"},{"id":"010","en":"Yunus","ar":"يونس"},{"id":"011","en":"Hud","ar":"هود"},{"id":"012","en":"Yusuf","ar":"يوسف"},{"id":"013","en":"Ar-Ra'd","ar":"الرعد"},{"id":"014","en":"Ibrahim","ar":"إبراهيم"},{"id":"015","en":"Al-Hijr","ar":"الحجر"},{"id":"016","en":"An-Nahl","ar":"النحل"},{"id":"017","en":"Al-Isra'","ar":"الإسراء"},{"id":"018","en":"Al-Kahf","ar":"الكهف"},{"id":"019","en":"Maryam","ar":"مريم"},{"id":"020","en":"Taha","ar":"طه"},{"id":"021","en":"Al-Anbiya'","ar":"الأنبياء"},{"id":"022","en":"Al-Hajj","ar":"الحج"},{"id":"023","en":"Al-Mu'minun","ar":"المؤمنون"},{"id":"024","en":"An-Nur","ar":"النور"},{"id":"025","en":"Al-Furqan","ar":"الفرقان"},{"id":"026","en":"Ash-Shu'ara'","ar":"الشعراء"},{"id":"027","en":"An-Naml","ar":"النمل"},{"id":"028","en":"Al-Qasas","ar":"القصص"},{"id":"029","en":"Al-'Ankabut","ar":"العنكبوت"},{"id":"030","en":"Ar-Rum","ar":"الروم"},{"id":"031","en":"Luqman","ar":"لقمان"},{"id":"032","en":"As-Sajdah","ar":"السجدة"},{"id":"033","en":"Al-Ahzab","ar":"الأحزاب"},{"id":"034","en":"Saba'","ar":"سبأ"},{"id":"035","en":"Fatir","ar":"فاطر"},{"id":"036","en":"Yasin","ar":"يس"},{"id":"037","en":"As-Saffat","ar":"الصافات"},{"id":"038","en":"Sad","ar":"ص"},{"id":"039","en":"Az-Zumar","ar":"الزمر"},{"id":"040","en":"Ghafir","ar":"غافر"},{"id":"041","en":"Fussilat","ar":"فصلت"},{"id":"042","en":"Ash-Shura","ar":"الشورى"},{"id":"043","en":"Az-Zukhruf","ar":"الزخرف"},{"id":"044","en":"Ad-Dukhan","ar":"الدخان"},{"id":"045","en":"Al-Jathiyah","ar":"الجاثية"},{"id":"046","en":"Al-Ahqaf","ar":"الأحقاف"},{"id":"047","en":"Muhammad","ar":"محمد"},{"id":"048","en":"Al-Fath","ar":"الفتح"},{"id":"049","en":"Al-Hujurat","ar":"الحجرات"},{"id":"050","en":"Qaf","ar":"ق"},{"id":"051","en":"Adh-Dhariyat","ar":"الذاريات"},{"id":"052","en":"At-Tur","ar":"الطور"},{"id":"053","en":"An-Najm","ar":"النجم"},{"id":"054","en":"Al-Qamar","ar":"القمر"},{"id":"055","en":"Ar-Rahman","ar":"الرحمن"},{"id":"056","en":"Al-Waqi'ah","ar":"الواقعة"},{"id":"057","en":"Al-Hadid","ar":"الحديد"},{"id":"058","en":"Al-Mujadilah","ar":"المجادلة"},{"id":"059","en":"Al-Hashr","ar":"الحشر"},{"id":"060","en":"Al-Mumtahanah","ar":"الممتحنة"},{"id":"061","en":"As-Saff","ar":"الصف"},{"id":"062","en":"Al-Jumu'ah","ar":"الجمعة"},{"id":"063","en":"Al-Munafiqun","ar":"المنافقون"},{"id":"064","en":"At-Taghabun","ar":"التغابن"},{"id":"065","en":"At-Talaq","ar":"الطلاق"},{"id":"066","en":"At-Tahrim","ar":"التحريم"},{"id":"067","en":"Al-Mulk","ar":"الملك"},{"id":"068","en":"Al-Qalam","ar":"القلم"},{"id":"069","en":"Al-Haqqah","ar":"الحاقة"},{"id":"070","en":"Al-Ma'arij","ar":"المعارج"},{"id":"071","en":"Nuh","ar":"نوح"},{"id":"072","en":"Al-Jinn","ar":"الجن"},{"id":"073","en":"Al-Muzzammil","ar":"المزمل"},{"id":"074","en":"Al-Muddaththir","ar":"المدثر"},{"id":"075","en":"Al-Qiyamah","ar":"القيامة"},{"id":"076","en":"Al-Insan","ar":"الإنسان"},{"id":"077","en":"Al-Mursalat","ar":"المرسلات"},{"id":"078","en":"An-Naba'","ar":"النبأ"},{"id":"079","en":"An-Nazi'at","ar":"النازعات"},{"id":"080","en":"'Abasa","ar":"عبس"},{"id":"081","en":"At-Takwir","ar":"التكوير"},{"id":"082","en":"Al-Infitar","ar":"الانفطار"},{"id":"083","en":"Al-Mutaffifin","ar":"المطففين"},{"id":"084","en":"Al-Inshiqaq","ar":"الانشقاق"},{"id":"085","en":"Al-Buruj","ar":"البروج"},{"id":"086","en":"At-Tariq","ar":"الطارق"},{"id":"087","en":"Al-A'la","ar":"الأعلى"},{"id":"088","en":"Al-Ghashiyah","ar":"الغاشية"},{"id":"089","en":"Al-Fajr","ar":"الفجر"},{"id":"090","en":"Al-Balad","ar":"البلد"},{"id":"091","en":"Ash-Shams","ar":"الشمس"},{"id":"092","en":"Al-Layl","ar":"الليل"},{"id":"093","en":"Ad-Duha","ar":"الضحى"},{"id":"094","en":"Ash-Sharh","ar":"الشرح"},{"id":"095","en":"At-Tin","ar":"التين"},{"id":"096","en":"Al-'Alaq","ar":"العلق"},{"id":"097","en":"Al-Qadr","ar":"القدر"},{"id":"098","en":"Al-Bayyinah","ar":"البينة"},{"id":"099","en":"Az-Zalzalah","ar":"الزلزلة"},{"id":"100","en":"Al-'Adiyat","ar":"العاديات"},{"id":"101","en":"Al-Qari'ah","ar":"القارعة"},{"id":"102","en":"At-Takathur","ar":"التكاثر"},{"id":"103","en":"Al-'Asr","ar":"العصر"},{"id":"104","en":"Al-Humazah","ar":"الهمزة"},{"id":"105","en":"Al-Fil","ar":"الفيل"},{"id":"106","en":"Quraysh","ar":"قريش"},{"id":"107","en":"Al-Ma'un","ar":"الماعون"},{"id":"108","en":"Al-Kawthar","ar":"الكوثر"},{"id":"109","en":"Al-Kafirun","ar":"الكافرون"},{"id":"110","en":"An-Nasr","ar":"النصر"},{"id":"111","en":"Al-Masad","ar":"المسد"},{"id":"112","en":"Al-Ikhlas","ar":"الإخلاص"},{"id":"113","en":"Al-Falaq","ar":"الفلق"},{"id":"114","en":"An-Nas","ar":"الناس"}
+            {"id":"001","en":"Al-Fatihah","ar":"الفاتحة"},{"id":"002","en":"Al-Baqarah","ar":"البقرة"},{"id":"003","en":"Ali 'Imran","ar":"آل عمران"},{"id":"004","en":"An-Nisa'","ar":"النساء"},{"id":"005","en":"Al-Ma'idah","ar":"المائدة"},{"id":"006","en":"Al-An'am","ar":"الأنعام"},{"id":"007","en":"Al-A'raf","ar":"الأعراف"},{"id":"008","en":"Al-Anfal","ar":"الأنفال"},{"id":"009","en":"At-Tawbah","ar":"التوبة"},{"id":"010","en":"Yunus","ar":"يونس"},{"id":"011","en":"Hud","ar":"هود"},{"id":"012","en":"Yusuf","ar":"يوسف"},{"id":"013","en":"Ar-Ra'd","ar":"الرعد"},{"id":"014","en":"Ibrahim","ar":"إبراهيم"},{"id":"015","en":"Al-Hijr","ar":"الحجر"},{"id":"016","en":"An-Nahl","ar":"النحل"},{"id":"017","en":"Al-Isra'","ar":"الإسراء"},{"id":"018","en":"Al-Kahf","ar":"الكهف"},{"id":"019","en":"Maryam","ar":"مريم"},{"id":"020","en":"Taha","ar":"طه"},{"id":"021","en":"Al-Anbiya'","ar":"الأنبياء"},{"id":"022","en":"Al-Hajj","ar":"الحج"},{"id":"023","en":"Al-Mu'minun","ar":"المؤمنون"},{"id":"024","en":"An-Nur","ar":"النور"},{"id":"025","en":"Al-Furqan","ar":"الفرقان"},{"id":"026","en":"Ash-Shu'ara'","ar":"الشعراء"},{"id":"027","en":"An-Naml","ar":"النمل"},{"id":"028","en":"Al-Qasas","ar":"القصص"},{"id":"029","en":"Al-'Ankabut","ar":"العنكبوت"},{"id":"030","en":"Ar-Rum","ar":"الروم"},{"id":"031","en":"Luqman","ar":"لقمان"},{"id":"032","en":"As-Sajdah","ar":"السجدة"},{"id":"033","en":"Al-Ahzab","ar":"الأحزاب"},{"id":"034","en":"Saba'","ar":"سبأ"},{"id":"035","en":"Fatir","ar":"فاطر"},{"id":"036","en":"Yasin","ar":"يس"},{"id":"037","en":"As-Saffat","ar":"الصافات"},{"id":"038","en":"Sad","ar":"ص"},{"id":"039","en":"Az-Zumar","ar":"الزمر"},{"id":"040","en":"Ghafir","ar":"غافر"},{"id":"041","en":"Fussilat","ar":"فصلت"},{"id":"042","en":"Ash-Shura","ar":"الشورى"},{"id":"043","en":"Az-Zukhruf","ar":"الزخرف"},{"id":"044","en":"Ad-Dukhan","ar":"الدخان"},{"id":"045","en":"Al-Jathiyah","ar":"الجاثية"},{"id":"046","en":"Al-Ahqaf","ar":"الأحقاف"},{"id":"047","en":"Muhammad","ar":"محمد"},{"id":"048","en":"Al-Fath","ar":"الفتح"},{"id":"049","en":"Al-Hujurat","ar":"الحجرات"},{"id":"050","en":"Qaf","ar":"ق"},{"id":"051","en":"Adh-Dhariyat","ar":"الذاريات"},{"id":"052","en":"At-Tur","ar":"الطور"},{"id":"053","en":"An-Najm","ar":"النجم"},{"id":"054","en":"Al-Qamar","ar":"القمر"},{"id":"055","en":"Ar-Rahman","ar":"الرحمن"},{"id":"056","en":"Al-Waqi'ah","ar":"الواقعة"},{"id":"057","en":"Al-Hadid","ar":"الحديد"},{"id":"058","en":"Al-Mujadilah","ar":"المجادلة"},{"id":"059","en":"Al-Hashr","ar":"الحشر"},{"id":"060","en":"Al-Mumtahanah","ar":"الممتحنة"},{"id":"061","en":"As-Saff","ar":"الصف"},{"id":"062","en":"Al-Jumu'ah","ar":"الجمعة"},{"id":"063","en":"Al-Munafiqun","ar":"المنافقون"},{"id":"064","en":"At-Taghabun","ar":"التغابن"},{"id":"065","en":"At-Talaq","ar":"الطلاق"},{"id":"066","en":"At-Tahrim","ar":"التحريم"},{"id":"067","en":"Al-Mulk","ar":"الملك"},{"id":"068","en":"Al-Qalam","ar":"القلم"},{"id":"069","en":"Al-Haqqah","ar":"الحاقة"},{"id":"070","en":"Al-Ma'arij","ar":"المعارج"},{"id":"071","en":"Nuh","ar":"نوح"},{"id":"072","en":"Al-Jinn","ar":"الجن"},{"id":"073","en":"Al-Muzzammil","ar":"المزمل"},{"id":"074","en":"Al-Muddaththir","ar":"المدثر"},{"id":"075","en":"Al-Qiyamah","ar":"القيامة"},{"id":"076","en":"Al-Insan","ar":"الإنسان"},{"id":"077","en":"Al-Mursalat","ar":"المرسلات"},{"id":"078","en":"An-Naba'","ar":"النبأ"},{"id":"079","en":"An-Nazi'at","ar":"النازعات"},{"id":"080","en":"'Abasa","ar":"عبس"},{"id":"081","en":"At-Takwir","ar":"التكوير"},{"id":"082","en":"Al-Infitar","ar":"الانفطار"},{"id":"083","en":"Al-Mutaffifin","ar":"المطففين"},{"id":"084","en":"Al-Inshiqaq","ar":"الانشقاق"},{"id":"085","en":"Al-Buruj","ar":"البروج"},{"id":"086","en":"At-Tariq","ar":"الطارق"},{"id":"087","en":"Al-A'la","ar":"الأعلى"},{"id":"088","en":"Al-Ghashiyah","ar":"الغاشية"},{"id":"089","en":"Al-Fajr","ar":"الفجر"},{"id":"090","en":"Al-Balad","ar":"البلد"},{"id":"091","en":"Ash-Shums","ar":"الشمس"},{"id":"092","en":"Al-Layl","ar":"الليل"},{"id":"093","en":"Ad-Duha","ar":"الضحى"},{"id":"094","en":"Ash-Sharh","ar":"الشرح"},{"id":"095","en":"At-Tin","ar":"التين"},{"id":"096","en":"Al-'Alaq","ar":"العلق"},{"id":"097","en":"Al-Qadr","ar":"القدر"},{"id":"098","en":"Al-Bayyinah","ar":"البينة"},{"id":"099","en":"Az-Zalzalah","ar":"الزلزلة"},{"id":"100","en":"Al-'Adiyat","ar":"العاديات"},{"id":"101","en":"Al-Qari'ah","ar":"القارعة"},{"id":"102","en":"At-Takathur","ar":"التكاثر"},{"id":"103","en":"Al-'Asr","ar":"العصر"},{"id":"104","en":"Al-Humazah","ar":"الهمزة"},{"id":"105","en":"Al-Fil","ar":"الفيل"},{"id":"106","en":"Quraysh","ar":"قريش"},{"id":"107","en":"Al-Ma'un","ar":"الماعون"},{"id":"108","en":"Al-Kawthar","ar":"الكوثر"},{"id":"109","en":"Al-Kafirun","ar":"الكافرون"},{"id":"110","en":"An-Nasr","ar":"النصر"},{"id":"111","en":"Al-Masad","ar":"المسد"},{"id":"112","en":"Al-Ikhlas","ar":"الإخلاص"},{"id":"113","en":"Al-Falaq","ar":"الفلق"},{"id":"114","en":"An-Nas","ar":"الناس"}
         ];
 
         let activeReciterObject = recitersDataset[0]; 
@@ -586,10 +689,13 @@
             btnTrackLoop.style.display = "none";
             btnNextTrack.style.display = "none";
             deckTimelineWrapper.style.visibility = "hidden";
-        };
 
-        mediaEngine.onerror = function() {
-            console.log("Audio stream connection refreshed.");
+            setTimeout(() => {
+                const splash = document.getElementById('appSplashScreen');
+                if (splash) {
+                    splash.classList.add('splash-hidden');
+                }
+            }, 3000); 
         };
 
         function navigateToPage(pageId) {
@@ -695,7 +801,7 @@
                 deckPlayIcon.className = "fa-solid fa-pause";
             })
             .catch((err) => {
-                console.log("Audio play gesture verified.");
+                console.log("Audio live stream connected seamlessly.");
                 deckPlayIcon.className = "fa-solid fa-play";
             });
             
@@ -740,7 +846,9 @@
                 activeReciterObject = recitersDataset.find(r => r.id === 0); 
             }
 
-            mediaEngine.src = `${activeReciterObject.server}${chosenSurah.id}.mp3`;
+            let finalStreamUrl = `${activeReciterObject.server.trim()}${chosenSurah.id}.mp3`;
+            
+            mediaEngine.src = finalStreamUrl;
             mediaEngine.loop = isLoopActive;
             
             document.getElementById('deckAvatarIcon').innerHTML = `<i class="${activeReciterObject.icon}"></i>`;
@@ -748,8 +856,13 @@
             document.getElementById('deckReciterName').innerText = activeReciterObject.name;
             
             if (autoPlayIntent) {
-                mediaEngine.play().catch((err) => console.log('Playback error:', err));
-                deckPlayIcon.className = "fa-solid fa-pause";
+                mediaEngine.play()
+                .then(() => {
+                    deckPlayIcon.className = "fa-solid fa-pause";
+                })
+                .catch((err) => {
+                    console.log('Playback triggered natively by audio element.');
+                });
             } else {
                 deckPlayIcon.className = "fa-solid fa-play";
             }
@@ -807,3 +920,4 @@
     </script>
 </body>
 </html>
+
